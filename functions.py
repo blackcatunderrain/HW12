@@ -1,17 +1,23 @@
 import json
 
-FILENAME = "posts.json"
 
-
-def load_posts(filename: str) -> list[dict]:
+def load_posts() -> list[dict]:
     """Загружаем JSON из файла"""
-    with open(filename, encoding='UTF-8') as file:
+    with open('posts.json', 'r', encoding='UTF-8') as file:
         return json.load(file)
 
 
-def get_posts_by_word(skill: str) -> list[dict]:
+def get_posts_by_word(word: str) -> list[dict]:
     result = []
     for post in load_posts():
-        if post.lower() in post["content"].lower():
+        if word.lower() in post['content'].lower():
             result.append(post)
     return result
+
+
+def add_post(post: dict) -> dict:
+    posts: list[dict] = load_posts()
+    posts.append(post)
+    with open('posts.json', 'w', encoding='UTF-8') as file:
+        json.dump(posts, file)
+    return post
