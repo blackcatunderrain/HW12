@@ -3,7 +3,7 @@ import json
 
 def load_posts() -> list[dict]:
     """Загружаем JSON из файла"""
-    with open('posts.json', 'r', encoding='UTF-8') as file:
+    with open('posts1.json', 'r', encoding='UTF-8') as file:
         return json.load(file)
 
 

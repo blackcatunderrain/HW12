@@ -1,3 +1,4 @@
+import logging
 from json import JSONDecodeError
 
 from flask import Blueprint, render_template, request
@@ -15,10 +16,12 @@ def main_page():
 @main_blueprint.route('/search/')
 def search_page():
     search_query = request.args.get('s', '')
+    logging.info('try to search')
     try:
         posts = get_posts_by_word(search_query)
     except FileNotFoundError:
-        return
+        logging.error('File not found')
+        return 'File not found'
     except JSONDecodeError:
         return 'Invalid JSON'
     return render_template('post_list.html', query=search_query, posts=posts)
