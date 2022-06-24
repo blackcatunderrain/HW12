@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 from flask import Blueprint, render_template, request
 
 from functions import add_post
@@ -19,6 +21,14 @@ def page_post_upload():
     if not picture or not content:
         return 'Error'
 
-    picture_path: str = '/' + save_picture(picture)
+    if picture.filename.split('.')[-1] not in ['jpeg','png']:
+        return 'Not valid file'
+
+    try:
+        picture_path: str = '/' + save_picture(picture)
+    except FileNotFoundError:
+        return 'File not exists'
+    except JSONDecodeError:
+        return 'Invalid JSON'
     post: dict = add_post({'pic': picture_path, 'content': content})
     return render_template('post_uploaded.html', post=post)
